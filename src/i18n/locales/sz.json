@@ -1,0 +1,96 @@
+{
+  "app": {
+    "name": "Sizang Pawlpi Kiangkhat"
+  },
+  "nav": {
+    "home": "Inn",
+    "forums": "Kikupna Mun",
+    "groups": "Kipawlna",
+    "resources": "Thuciamte",
+    "signIn": "Lut In",
+    "signUp": "Min vawtna",
+    "profile": {
+      "signedInAs": "A lutna min",
+      "myProfile": "Ka Ciaptehna",
+      "myGroups": "Ka Pawlpi",
+      "settings": "Thusemna",
+      "helpFeedback": "Huhna le Ngaihsutna",
+      "logout": "Pusuakna"
+    }
+  },
+  "languages": {
+    "en": "English",
+    "sz": "Sizang",
+    "my": "Myanmar",
+    "select": "Pau Teal In"
+  },
+  "home": {
+    "welcome": "Sizang Pawlpi Kiangkhat ah Hongpai Uh",
+    "subtitle": "Leitung mun khempeuh a om Sizang (Siyin) mite kikholkhopna, kikupna le eima ngeina humbitna dinga kikoihkhopna mun."
+  },
+  "forums": {
+    "title": "Pawlpi Kikupna",
+    "newTopic": "Thu Thak",
+    "categories": {
+      "all": "Thu Khempeuh",
+      "culture": "Ngeina",
+      "religion": "Biakna",
+      "youth": "Khangno",
+      "language": "Pau",
+      "events": "Thutuamte",
+      "migration": "Kithehna"
+    }
+  },
+  "groups": {
+    "title": "Pawlpi Kiangkhatte",
+    "subtitle": "Nangma ngaihsutna kibang mite tawh kizom in pawlpi sung ah kihel in",
+    "createGroup": "Pawlpi Bawl",
+    "joinGroup": "Pawlpi Sung Lut",
+    "leaveGroup": "Pawlpi Nusia",
+    "members": "mite"
+  },
+  "resources": {
+    "title": "Thuciamte",
+    "subtitle": "Sizang ngeina, pau, le tangthu tawh kisai thuciamte zong in kihel in",
+    "upload": "Thuciamte Khia",
+    "download": "Thuciamte La",
+    "share": "Kihawm",
+    "categories": {
+      "all": "Thuciamte Khempeuh",
+      "language": "Pau",
+      "history": "Tangthu",
+      "culture": "Ngeina",
+      "education": "Sinna",
+      "media": "Media"
+    }
+  },
+  "auth": {
+    "signIn": {
+      "title": "Hongpai Kik",
+      "subtitle": "Sizang Pawlpi Kiangkhat ah lutna ding in min kiciam in",
+      "email": "Email",
+      "password": "Password",
+      "rememberMe": "Keiphah in",
+      "forgotPassword": "Password mangthang?",
+      "submit": "Lut In",
+      "or": "AHIHKEH",
+      "googleSignIn": "Google tawh lut in",
+      "noAccount": "Account neilo?",
+      "signUp": "Min kiciam in"
+    },
+    "signUp": {
+      "title": "Account Bawl",
+      "subtitle": "Sizang Pawlpi Kiangkhat ah hong kihel in",
+      "name": "Min Kicing",
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Password Kiciam",
+      "agreeTerms": "Terms of Service le Privacy Policy ka sang hi",
+      "submit": "Min Kiciam",
+      "or": "AHIHKEH",
+      "googleSignUp": "Google tawh min kiciam in",
+      "haveAccount": "Account nei zo?",
+      "signIn": "Lut in"
+    }
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "app": {
+    "name": "Sizang Community Hub"
+  },
+  "nav": {
+    "home": "Home",
+    "forums": "Forums",
+    "groups": "Groups",
+    "resources": "Resources",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "profile": {
+      "signedInAs": "Signed in as",
+      "myProfile": "My Profile",
+      "myGroups": "My Groups",
+      "settings": "Settings",
+      "helpFeedback": "Help & Feedback",
+      "logout": "Log Out"
+    }
+  },
+  "languages": {
+    "en": "English",
+    "sz": "Sizang",
+    "my": "Burmese",
+    "select": "Select Language"
+  },
+  "home": {
+    "welcome": "Welcome to the Sizang Community Hub",
+    "subtitle": "A private digital space for the global Sizang (Siyin) people to connect, share, and preserve our culture."
+  },
+  "forums": {
+    "title": "Community Discussions",
+    "newTopic": "New Topic",
+    "categories": {
+      "all": "All Topics",
+      "culture": "Culture",
+      "religion": "Religion",
+      "youth": "Youth",
+      "language": "Language",
+      "events": "Events",
+      "migration": "Migration"
+    }
+  },
+  "groups": {
+    "title": "Community Groups",
+    "subtitle": "Join groups based on shared interests and connect with community members",
+    "createGroup": "Create Group",
+    "joinGroup": "Join Group",
+    "leaveGroup": "Leave Group",
+    "members": "members"
+  },
+  "resources": {
+    "title": "Resources",
+    "subtitle": "Explore and share resources related to Sizang culture, language, and history",
+    "upload": "Upload",
+    "download": "Download",
+    "share": "Share",
+    "categories": {
+      "all": "All Resources",
+      "language": "Language",
+      "history": "History",
+      "culture": "Culture",
+      "education": "Education",
+      "media": "Media"
+    }
+  },
+  "auth": {
+    "signIn": {
+      "title": "Welcome Back",
+      "subtitle": "Sign in to continue to Sizang Community Hub",
+      "email": "Email",
+      "password": "Password",
+      "rememberMe": "Remember me",
+      "forgotPassword": "Forgot password?",
+      "submit": "Sign In",
+      "or": "OR",
+      "googleSignIn": "Sign in with Google",
+      "noAccount": "Don't have an account?",
+      "signUp": "Sign up"
+    },
+    "signUp": {
+      "title": "Create Account",
+      "subtitle": "Join the Sizang Community Hub",
+      "name": "Full Name",
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "agreeTerms": "I agree to the Terms of Service and Privacy Policy",
+      "submit": "Sign Up",
+      "or": "OR",
+      "googleSignUp": "Sign up with Google",
+      "haveAccount": "Already have an account?",
+      "signIn": "Sign in"
+    }
+  }
+}
