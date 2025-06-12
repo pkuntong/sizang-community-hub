@@ -3,14 +3,13 @@ import { Card, CardBody, CardHeader, Button, Avatar, Spinner } from "@heroui/rea
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useGroups } from "../context/group-context";
 import { useAuth } from "./auth/auth-context";
-import { useHistory } from "react-router-dom";
 import { NotificationService } from "../services/notification-service";
 
 export const PopularGroups: React.FC = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { user } = useAuth();
   
   const { t } = useTranslation();
@@ -55,7 +54,7 @@ export const PopularGroups: React.FC = () => {
         <Button 
           size="sm" 
           variant="light"
-          onPress={() => history.push("/groups")}
+          onPress={() => navigate("/groups")}
         >
           View All
         </Button>

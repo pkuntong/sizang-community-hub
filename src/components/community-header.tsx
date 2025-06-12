@@ -3,10 +3,10 @@ import { Card, CardBody, Button, Tabs, Tab } from "@heroui/react";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export const CommunityHeader: React.FC = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   
   return (
     <Card className="border-none bg-gradient-to-r from-primary-100 to-primary-50">

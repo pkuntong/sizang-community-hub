@@ -4,11 +4,11 @@ import { Icon } from "@iconify/react";
 import { DiscussionPost } from "./discussion-post";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export const DiscussionFeed: React.FC = () => {
   const [selected, setSelected] = React.useState("latest");
-  const history = useHistory();
+  const navigate = useNavigate();
   const { t } = useTranslation();
 
   const discussions = [
@@ -65,7 +65,7 @@ export const DiscussionFeed: React.FC = () => {
   ];
 
   const handleDiscussionClick = (discussionId: number) => {
-    history.push(`/forums/discussion/${discussionId}`);
+    navigate(`/forums/discussion/${discussionId}`);
   };
 
   return (
@@ -76,7 +76,7 @@ export const DiscussionFeed: React.FC = () => {
           <Button 
             color="primary" 
             size="sm"
-            onPress={() => history.push("/forums")}
+            onPress={() => navigate("/forums")}
           >
             New Post
           </Button>

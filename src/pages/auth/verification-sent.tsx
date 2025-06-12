@@ -2,13 +2,13 @@ import React from "react";
 import { Card, CardBody, Button } from "@heroui/react";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../components/auth/auth-context";
 
 export const VerificationSentPage: React.FC = () => {
   const [email, setEmail] = React.useState("");
   const { resendVerificationEmail } = useAuth();
-  const history = useHistory();
+  const navigate = useNavigate();
   
   React.useEffect(() => {
     // Get the email from the unverified user in localStorage
@@ -70,7 +70,7 @@ export const VerificationSentPage: React.FC = () => {
                 </Button>
                 <Button 
                   variant="flat" 
-                  onPress={() => history.push("/auth/sign-in")}
+                  onPress={() => navigate("/auth/sign-in")}
                 >
                   Back to Sign In
                 </Button>

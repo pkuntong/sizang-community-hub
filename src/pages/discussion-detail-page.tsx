@@ -2,7 +2,7 @@ import React from "react";
 import { Card, CardBody, CardHeader, Avatar, Button, Textarea, Divider, Chip, Spinner } from "@heroui/react";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
-import { Link, useParams, useHistory } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useDiscussions } from "../context/discussion-context";
 import { useAuth } from "../components/auth/auth-context";
 
@@ -28,7 +28,7 @@ export const DiscussionDetailPage: React.FC = () => {
   const discussionId = parseInt(id || "0");
   const [comment, setComment] = React.useState("");
   const [isSubmitting, setIsSubmitting] = React.useState(false);
-  const history = useHistory();
+  const navigate = useNavigate();
   
   // Replace static data with context
   const { 
@@ -93,7 +93,7 @@ export const DiscussionDetailPage: React.FC = () => {
         <p className="text-foreground-500 mb-6">The discussion you're looking for doesn't exist or has been removed.</p>
         <Button 
           color="primary"
-          onPress={() => history.push("/forums")}
+          onPress={() => navigate("/forums")}
           startContent={<Icon icon="lucide:arrow-left" />}
         >
           Back to Forums

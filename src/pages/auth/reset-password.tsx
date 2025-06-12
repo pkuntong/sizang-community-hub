@@ -1,19 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardBody, CardHeader, Input, Button, Link } from "@heroui/react";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
-import { useHistory, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../components/auth/auth-context";
 import { useTranslation } from "react-i18next";
 
 export const ResetPasswordPage: React.FC = () => {
-  const [password, setPassword] = React.useState("");
-  const [confirmPassword, setConfirmPassword] = React.useState("");
-  const [isSubmitting, setIsSubmitting] = React.useState(false);
-  const [isSubmitted, setIsSubmitted] = React.useState(false);
-  const [error, setError] = React.useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [error, setError] = useState("");
   const { resetPassword } = useAuth();
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation();
   
@@ -45,6 +45,7 @@ export const ResetPasswordPage: React.FC = () => {
     try {
       await resetPassword(token, password);
       setIsSubmitted(true);
+      navigate("/auth/sign-in");
     } catch (error) {
       console.error("Password reset error:", error);
       setError(error instanceof Error ? error.message : "An error occurred");
@@ -67,7 +68,7 @@ export const ResetPasswordPage: React.FC = () => {
             </p>
             <Button 
               color="primary"
-              onPress={() => history.push("/auth/forgot-password")}
+              onPress={() => navigate("/auth/forgot-password")}
               fullWidth
             >
               Request New Reset Link
@@ -90,7 +91,7 @@ export const ResetPasswordPage: React.FC = () => {
           <CardHeader className="flex flex-col gap-1 items-center">
             <div 
               className="bg-primary rounded-full p-3 mb-2 cursor-pointer"
-              onClick={() => history.push("/")}
+              onClick={() => navigate("/")}
             >
               <Icon icon="lucide:lock" className="text-white text-xl" />
             </div>
@@ -149,7 +150,7 @@ export const ResetPasswordPage: React.FC = () => {
                 </p>
                 <Button 
                   color="primary"
-                  onPress={() => history.push("/auth/sign-in")}
+                  onPress={() => navigate("/auth/sign-in")}
                   fullWidth
                 >
                   Sign In

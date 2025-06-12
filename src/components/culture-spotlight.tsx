@@ -3,10 +3,10 @@ import { Card, CardBody, CardHeader, CardFooter, Button, Link } from "@heroui/re
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export const CultureSpotlight: React.FC = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   
   return (
     <Card>
@@ -15,7 +15,7 @@ export const CultureSpotlight: React.FC = () => {
         <Button 
           size="sm" 
           variant="light"
-          onPress={() => history.push("/resources?category=culture")}
+          onPress={() => navigate("/resources?category=culture")}
         >
           More
         </Button>
@@ -63,7 +63,7 @@ export const CultureSpotlight: React.FC = () => {
           color="primary" 
           size="sm"
           className="cursor-pointer"
-          onPress={() => history.push("/resources")}
+          onPress={() => navigate("/resources")}
         >
           View All Cultural Resources
         </Link>

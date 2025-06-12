@@ -19,18 +19,32 @@ const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 export class ApiService {
   // Store data in localStorage for persistence
   private static getStorageItem<T>(key: string, defaultValue: T): T {
-    const stored = localStorage.getItem(key);
-    return stored ? JSON.parse(stored) : defaultValue;
+    try {
+      const stored = localStorage.getItem(key);
+      return stored ? JSON.parse(stored) : defaultValue;
+    } catch (error) {
+      console.error(`Error getting storage item ${key}:`, error);
+      return defaultValue;
+    }
   }
 
   private static setStorageItem<T>(key: string, value: T): void {
-    localStorage.setItem(key, JSON.stringify(value));
+    try {
+      localStorage.setItem(key, JSON.stringify(value));
+    } catch (error) {
+      console.error(`Error setting storage item ${key}:`, error);
+    }
   }
 
   // Discussion API methods
   static async getDiscussions(): Promise<Discussion[]> {
-    await delay(800); // Simulate network delay
-    return this.getStorageItem<Discussion[]>("discussions", MOCK_DISCUSSIONS);
+    try {
+      await delay(800);
+      return this.getStorageItem<Discussion[]>("discussions", MOCK_DISCUSSIONS);
+    } catch (error) {
+      console.error("Error fetching discussions:", error);
+      throw new Error("Failed to fetch discussions");
+    }
   }
 
   static async getDiscussionById(id: number): Promise<Discussion | undefined> {

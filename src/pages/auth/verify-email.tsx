@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardBody, Button, Spinner } from "@heroui/react";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
-import { useHistory, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../components/auth/auth-context";
 
 export const VerifyEmailPage: React.FC = () => {
@@ -11,7 +11,7 @@ export const VerifyEmailPage: React.FC = () => {
   const [error, setError] = React.useState("");
   
   const { verifyEmail, resendVerificationEmail } = useAuth();
-  const history = useHistory();
+  const navigate = useNavigate();
   const location = useLocation();
   
   // Get token from URL query params
@@ -47,6 +47,25 @@ export const VerifyEmailPage: React.FC = () => {
     }
   };
   
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      setError("");
+      setIsVerifying(true);
+      const searchParams = new URLSearchParams(location.search);
+      const oobCode = searchParams.get("oobCode");
+      if (!oobCode) {
+        throw new Error("No verification code provided");
+      }
+      await verifyEmail(oobCode);
+      navigate("/sign-in");
+    } catch (err) {
+      setError("Failed to verify email");
+    }
+    setIsVerifying(false);
+  };
+  
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-12 bg-gradient-to-br from-background to-content2">
       <motion.div
@@ -73,7 +92,7 @@ export const VerifyEmailPage: React.FC = () => {
                 </p>
                 <Button 
                   color="primary" 
-                  onPress={() => history.push("/")}
+                  onPress={() => navigate("/")}
                 >
                   Go to Homepage
                 </Button>
@@ -97,7 +116,7 @@ export const VerifyEmailPage: React.FC = () => {
                   </Button>
                   <Button 
                     variant="flat" 
-                    onPress={() => history.push("/auth/sign-in")}
+                    onPress={() => navigate("/auth/sign-in")}
                   >
                     Back to Sign In
                   </Button>

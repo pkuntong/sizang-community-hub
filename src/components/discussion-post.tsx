@@ -2,7 +2,7 @@ import React from "react";
 import { Avatar, Button, Chip } from "@heroui/react";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useCategories } from "../context/category-context";
 import { useAuth } from "./auth/auth-context";
@@ -29,8 +29,8 @@ interface DiscussionPostProps {
 export const DiscussionPost: React.FC<DiscussionPostProps> = ({ post, onClick }) => {
   // Add translation hook
   const { t, i18n } = useTranslation();
-  // Add history for navigation
-  const history = useHistory();
+  // Add navigate for navigation
+  const navigate = useNavigate();
   
   // Animation variants
   const itemVariants = {

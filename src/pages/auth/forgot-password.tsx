@@ -1,112 +1,91 @@
-import React from "react";
-import { Card, CardBody, CardHeader, Input, Button, Link } from "@heroui/react";
-import { Icon } from "@iconify/react";
-import { motion } from "framer-motion";
-import { useHistory } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../components/auth/auth-context";
-import { useTranslation } from "react-i18next";
 
-export const ForgotPasswordPage: React.FC = () => {
-  const [email, setEmail] = React.useState("");
-  const [isSubmitting, setIsSubmitting] = React.useState(false);
-  const [isSubmitted, setIsSubmitted] = React.useState(false);
+export const ForgotPassword: React.FC = () => {
+  const [email, setEmail] = useState("");
+  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
   const { requestPasswordReset } = useAuth();
-  const history = useHistory();
-  const { t } = useTranslation();
-  
+  const navigate = useNavigate();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!email) return;
-    
-    setIsSubmitting(true);
-    
+
     try {
+      setMessage("");
+      setError("");
+      setLoading(true);
       await requestPasswordReset(email);
-      setIsSubmitted(true);
-    } catch (error) {
-      console.error("Password reset request error:", error);
-    } finally {
-      setIsSubmitting(false);
+      setMessage("Check your inbox for further instructions");
+      setTimeout(() => {
+        navigate("/sign-in");
+      }, 3000);
+    } catch (err) {
+      setError("Failed to reset password");
     }
+    setLoading(false);
   };
-  
+
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-b from-background to-content2/50">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="w-full max-w-md"
-      >
-        <Card className="w-full">
-          <CardHeader className="flex flex-col gap-1 items-center">
-            <div 
-              className="bg-primary rounded-full p-3 mb-2 cursor-pointer"
-              onClick={() => history.push("/")}
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8">
+        <div>
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+            Reset your password
+          </h2>
+          <p className="mt-2 text-center text-sm text-gray-600">
+            Enter your email address and we'll send you a link to reset your password.
+          </p>
+        </div>
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <span className="block sm:inline">{error}</span>
+          </div>
+        )}
+        {message && (
+          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+            <span className="block sm:inline">{message}</span>
+          </div>
+        )}
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+          <div>
+            <label htmlFor="email-address" className="sr-only">
+              Email address
+            </label>
+            <input
+              id="email-address"
+              name="email"
+              type="email"
+              autoComplete="email"
+              required
+              className="appearance-none rounded relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+              placeholder="Email address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+
+          <div>
+            <button
+              type="submit"
+              disabled={loading}
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-              <Icon icon="lucide:lock" className="text-white text-xl" />
-            </div>
-            <h2 className="text-2xl font-bold">Reset Password</h2>
-            <p className="text-foreground-500 text-center">
-              Enter your email address and we'll send you a link to reset your password
-            </p>
-          </CardHeader>
-          <CardBody>
-            {!isSubmitted ? (
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <Input
-                  label="Email Address"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  isRequired
-                  variant="bordered"
-                  startContent={<Icon icon="lucide:mail" className="text-foreground-400" />}
-                />
-                
-                <Button 
-                  type="submit" 
-                  color="primary" 
-                  fullWidth
-                  isLoading={isSubmitting}
-                  isDisabled={!email}
-                >
-                  Send Reset Link
-                </Button>
-                
-                <div className="flex justify-center">
-                  <Link 
-                    color="primary" 
-                    className="cursor-pointer"
-                    onPress={() => history.push("/auth/sign-in")}
-                  >
-                    Back to Sign In
-                  </Link>
-                </div>
-              </form>
-            ) : (
-              <div className="text-center py-6">
-                <div className="bg-success/10 rounded-full p-4 inline-flex mb-4">
-                  <Icon icon="lucide:check" className="text-success text-2xl" />
-                </div>
-                <h3 className="text-xl font-semibold mb-2">Check Your Email</h3>
-                <p className="text-foreground-500 mb-6">
-                  We've sent a password reset link to <span className="font-medium">{email}</span>
-                </p>
-                <Button 
-                  color="primary" 
-                  variant="flat"
-                  onPress={() => history.push("/auth/sign-in")}
-                  fullWidth
-                >
-                  Return to Sign In
-                </Button>
-              </div>
-            )}
-          </CardBody>
-        </Card>
-      </motion.div>
+              {loading ? "Sending reset link..." : "Reset Password"}
+            </button>
+          </div>
+        </form>
+        <div className="text-center">
+          <p className="text-sm text-gray-600">
+            Remember your password?{" "}
+            <Link to="/sign-in" className="font-medium text-indigo-600 hover:text-indigo-500">
+              Sign in
+            </Link>
+          </p>
+        </div>
+      </div>
     </div>
   );
 };

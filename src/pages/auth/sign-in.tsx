@@ -1,19 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardBody, CardHeader, Input, Button, Link, Divider, Checkbox } from "@heroui/react";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../components/auth/auth-context";
 
 export const SignInPage: React.FC = () => {
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [rememberMe, setRememberMe] = React.useState(false);
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [error, setError] = React.useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
   
   const { login, googleLogin } = useAuth();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,7 +34,7 @@ export const SignInPage: React.FC = () => {
     
     try {
       await login(email, password);
-      history.push("/");
+      navigate("/");
     } catch (error) {
       console.error("Login failed:", error);
       setError("Invalid email or password. Please try again.");
@@ -49,7 +49,7 @@ export const SignInPage: React.FC = () => {
     
     try {
       await googleLogin();
-      history.push("/");
+      navigate("/");
     } catch (error) {
       console.error("Google login failed:", error);
       setError("Google sign in failed. Please try again.");
@@ -123,7 +123,7 @@ export const SignInPage: React.FC = () => {
                     color="primary" 
                     size="sm" 
                     className="cursor-pointer"
-                    onPress={() => history.push("/auth/forgot-password")} // Add link to forgot password page
+                    onPress={() => navigate("/auth/forgot-password")} // Add link to forgot password page
                   >
                     {t('auth.signIn.forgotPassword')}
                   </Link>

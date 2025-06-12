@@ -2,7 +2,7 @@ import React from "react";
 import { Navbar, NavbarBrand, NavbarContent, NavbarItem, Button, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Avatar, Link } from "@heroui/react";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
-import { useHistory, useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "./auth/auth-context";
 import { LanguageSwitcher } from "./language-switcher";
 import { useTranslation } from "react-i18next";
@@ -10,8 +10,8 @@ import { useTranslation } from "react-i18next";
 export const MainNavbar: React.FC = () => {
   const { t } = useTranslation();
   const { user, isAuthenticated, logout } = useAuth();
-  const history = useHistory();
   const location = useLocation();
+  const navigate = useNavigate();
   
   const isActive = (path: string) => {
     return location.pathname === path;
@@ -19,11 +19,11 @@ export const MainNavbar: React.FC = () => {
   
   const handleLogout = () => {
     logout();
-    history.push("/");
+    navigate("/");
   };
   
   const handleNavigation = (path: string) => {
-    history.push(path);
+    navigate(path);
   };
 
   return (

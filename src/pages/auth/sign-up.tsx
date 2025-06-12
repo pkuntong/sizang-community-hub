@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardBody, CardHeader, Input, Button, Link, Divider, Checkbox } from "@heroui/react";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../components/auth/auth-context";
 
 export const SignUpPage: React.FC = () => {
@@ -15,7 +15,7 @@ export const SignUpPage: React.FC = () => {
   const [error, setError] = React.useState("");
   
   const { signup, googleLogin } = useAuth();
-  const history = useHistory();
+  const navigate = useNavigate();
   
   // Validation states
   const [passwordsMatch, setPasswordsMatch] = React.useState(true);
@@ -80,8 +80,7 @@ export const SignUpPage: React.FC = () => {
     
     try {
       await signup(name, email, password);
-      // Redirect to verification sent page instead of homepage
-      history.push("/auth/verification-sent");
+      navigate("/verification-sent");
     } catch (error) {
       console.error("Signup failed:", error);
       setError("Registration failed. Please try again.");
@@ -96,7 +95,7 @@ export const SignUpPage: React.FC = () => {
     
     try {
       await googleLogin();
-      history.push("/");
+      navigate("/");
     } catch (error) {
       console.error("Google signup failed:", error);
       setError("Google sign up failed. Please try again.");
@@ -230,7 +229,7 @@ export const SignUpPage: React.FC = () => {
             <div className="mt-6 text-center">
               <p className="text-foreground-500 text-sm">
                 Already have an account?{" "}
-                <Link href="/auth/sign-in" className="text-primary font-medium">
+                <Link to="/auth/sign-in" className="text-primary font-medium">
                   Sign in
                 </Link>
               </p>
