@@ -1,0 +1,243 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String    @id @default(cuid())
+  email             String    @unique
+  displayName       String
+  passwordHash      String
+  profilePicture    String?
+  role              Role      @default(USER)
+  languagePreference String   @default("en")
+  bio               String?
+  location          String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  lastActive        DateTime  @default(now())
+
+  // Relations
+  threads           ForumThread[]
+  replies           ForumReply[]
+  groups            GroupMembership[]
+  createdGroups     Group[]         @relation("GroupCreator")
+  resources         Resource[]
+  reports           Report[]        @relation("ReportedBy")
+  reportedContent   Report[]        @relation("ReportedContent")
+  invites           Invite[]        @relation("InvitedBy")
+  receivedInvites   Invite[]        @relation("InvitedUser")
+  notifications     Notification[]
+}
+
+model ForumCategory {
+  id          String        @id @default(cuid())
+  name        String
+  description String
+  slug        String        @unique
+  order       Int
+  parentId    String?
+  parent      ForumCategory? @relation("SubCategories", fields: [parentId], references: [id])
+  subCategories ForumCategory[] @relation("SubCategories")
+  threads     ForumThread[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model ForumThread {
+  id          String        @id @default(cuid())
+  title       String
+  content     String
+  categoryId  String
+  category    ForumCategory @relation(fields: [categoryId], references: [id])
+  authorId    String
+  author      User          @relation(fields: [authorId], references: [id])
+  language    String
+  isPinned    Boolean       @default(false)
+  isLocked    Boolean       @default(false)
+  viewCount   Int          @default(0)
+  replies     ForumReply[]
+  reports     Report[]      @relation("ThreadReports")
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  lastReplyAt DateTime      @default(now())
+}
+
+model ForumReply {
+  id        String      @id @default(cuid())
+  content   String
+  threadId  String
+  thread    ForumThread @relation(fields: [threadId], references: [id])
+  authorId  String
+  author    User        @relation(fields: [authorId], references: [id])
+  language  String
+  reports   Report[]    @relation("ReplyReports")
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+}
+
+model Group {
+  id          String            @id @default(cuid())
+  name        String
+  description String
+  slug        String            @unique
+  privacy     GroupPrivacy
+  creatorId   String
+  creator     User              @relation("GroupCreator", fields: [creatorId], references: [id])
+  members     GroupMembership[]
+  rules       String?
+  coverImage  String?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+}
+
+model GroupMembership {
+  id        String          @id @default(cuid())
+  groupId   String
+  group     Group           @relation(fields: [groupId], references: [id])
+  userId    String
+  user      User            @relation(fields: [userId], references: [id])
+  role      GroupRole
+  status    MembershipStatus
+  joinedAt  DateTime        @default(now())
+
+  @@unique([groupId, userId])
+}
+
+model Resource {
+  id          String    @id @default(cuid())
+  title       String
+  description String
+  type        ResourceType
+  url         String?
+  fileUrl     String?
+  language    String
+  authorId    String
+  author      User      @relation(fields: [authorId], references: [id])
+  category    String
+  tags        String[]
+  viewCount   Int       @default(0)
+  reports     Report[]  @relation("ResourceReports")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Report {
+  id          String        @id @default(cuid())
+  type        ReportType
+  targetId    String
+  reporterId  String
+  reporter    User          @relation("ReportedBy", fields: [reporterId], references: [id])
+  reportedUser User?        @relation("ReportedContent", fields: [targetId], references: [id])
+  reason      String
+  status      ReportStatus  @default(PENDING)
+  notes       String?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  // Relations to parent entities (nullable, only one will be set per report)
+  threadId    String?       // FK to ForumThread
+  thread      ForumThread?  @relation("ThreadReports", fields: [threadId], references: [id])
+
+  replyId     String?       // FK to ForumReply
+  reply       ForumReply?   @relation("ReplyReports", fields: [replyId], references: [id])
+
+  resourceId  String?       // FK to Resource
+  resource    Resource?     @relation("ResourceReports", fields: [resourceId], references: [id])
+}
+
+model Invite {
+  id        String      @id @default(cuid())
+  email     String
+  invitedBy String
+  inviter   User        @relation("InvitedBy", fields: [invitedBy], references: [id])
+  invitedUser String?
+  user      User?       @relation("InvitedUser", fields: [invitedUser], references: [id])
+  status    InviteStatus @default(PENDING)
+  role      Role        @default(USER)
+  createdAt DateTime    @default(now())
+  expiresAt DateTime
+}
+
+model Notification {
+  id          String    @id @default(cuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+  type        NotificationType
+  content     String
+  relatedId   String?   // ID of the related item (thread, reply, group, etc.)
+  relatedType String?   // Type of the related item
+  isRead      Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+enum Role {
+  ADMIN
+  MODERATOR
+  USER
+}
+
+enum GroupPrivacy {
+  PUBLIC
+  PRIVATE
+  SECRET
+}
+
+enum GroupRole {
+  ADMIN
+  MODERATOR
+  MEMBER
+}
+
+enum MembershipStatus {
+  ACTIVE
+  PENDING
+  BANNED
+}
+
+enum ResourceType {
+  LINK
+  FILE
+  ARTICLE
+}
+
+enum ReportType {
+  THREAD
+  REPLY
+  GROUP
+  RESOURCE
+  USER
+}
+
+enum ReportStatus {
+  PENDING
+  REVIEWED
+  RESOLVED
+  DISMISSED
+}
+
+enum InviteStatus {
+  PENDING
+  ACCEPTED
+  EXPIRED
+}
+
+enum NotificationType {
+  REPLY
+  MENTION
+  GROUP_INVITE
+  GROUP_POST
+  RESOURCE_SHARE
+}

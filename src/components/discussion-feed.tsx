@@ -73,13 +73,6 @@ export const DiscussionFeed: React.FC = () => {
       <CardHeader className="flex flex-col gap-2">
         <div className="flex justify-between items-center">
           <h2 className="text-xl font-bold">Community Discussions</h2>
-          <Button 
-            color="primary" 
-            size="sm"
-            onPress={() => navigate("/forums")}
-          >
-            New Post
-          </Button>
         </div>
         <Tabs 
           selectedKey={selected} 

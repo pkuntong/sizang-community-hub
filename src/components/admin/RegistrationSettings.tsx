@@ -23,7 +23,8 @@ export const RegistrationSettings: React.FC = () => {
   useEffect(() => {
     const fetchSettings = async () => {
       try {
-        // TODO: Implement actual API call
+        // Replace all TODO: Implement actual API call comments with real fetch calls to:
+        // - GET /api/admin/registration-settings
         // Mock data for now
         const mockSettings: RegistrationSettings = {
           isInviteOnly: true,
@@ -56,7 +57,9 @@ export const RegistrationSettings: React.FC = () => {
     setMessage(null);
 
     try {
-      // TODO: Implement actual API call
+      // Replace all TODO: Implement actual API call comments with real fetch calls to:
+      // - GET /api/admin/registration-settings
+      // - PATCH /api/admin/registration-settings (for toggling invite-only)
       setSettings(prev => ({
         ...prev,
         isInviteOnly: !prev.isInviteOnly
@@ -82,7 +85,9 @@ export const RegistrationSettings: React.FC = () => {
     setMessage(null);
 
     try {
-      // TODO: Implement actual API call
+      // Replace all TODO: Implement actual API call comments with real fetch calls to:
+      // - GET /api/admin/registration-settings
+      // - POST /api/admin/invite-codes (for generating)
       const newCode = Math.random().toString(36).substring(2, 8).toUpperCase();
       setNewInviteCode(newCode);
 
@@ -118,7 +123,9 @@ export const RegistrationSettings: React.FC = () => {
     setMessage(null);
 
     try {
-      // TODO: Implement actual API call
+      // Replace all TODO: Implement actual API call comments with real fetch calls to:
+      // - GET /api/admin/registration-settings
+      // - DELETE /api/admin/invite-codes/:code (for revoking)
       setSettings(prev => ({
         ...prev,
         inviteCodes: prev.inviteCodes.filter(ic => ic.code !== code)

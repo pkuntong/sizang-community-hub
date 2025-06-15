@@ -154,4 +154,95 @@ export class NotificationService {
     const { subject, body } = emailTemplates.emailVerification(user, verificationToken);
     return this.sendEmail(user.email, subject, body);
   }
+
+  // Create a notification in the database
+  private static async createNotification(data: {
+    userId: string;
+    type: 'REPLY' | 'MENTION' | 'GROUP_INVITE' | 'GROUP_POST' | 'RESOURCE_SHARE';
+    content: string;
+    relatedId?: string;
+    relatedType?: string;
+  }): Promise<void> {
+    try {
+      const response = await fetch('/api/notifications', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create notification');
+      }
+    } catch (error) {
+      console.error('Error creating notification:', error);
+    }
+  }
+
+  // Notify user of a new reply to their thread
+  public static async notifyThreadReply(
+    threadAuthorId: string,
+    replyAuthorName: string,
+    threadId: string,
+    threadTitle: string
+  ): Promise<void> {
+    await this.createNotification({
+      userId: threadAuthorId,
+      type: 'REPLY',
+      content: `${replyAuthorName} replied to your thread: "${threadTitle}"`,
+      relatedId: threadId,
+      relatedType: 'thread'
+    });
+  }
+
+  // Notify user when they are mentioned in a reply
+  public static async notifyMention(
+    mentionedUserId: string,
+    mentionerName: string,
+    threadId: string,
+    threadTitle: string
+  ): Promise<void> {
+    await this.createNotification({
+      userId: mentionedUserId,
+      type: 'MENTION',
+      content: `${mentionerName} mentioned you in "${threadTitle}"`,
+      relatedId: threadId,
+      relatedType: 'thread'
+    });
+  }
+
+  // Notify user of a group invite
+  public static async notifyGroupInvite(
+    invitedUserId: string,
+    inviterName: string,
+    groupId: string,
+    groupName: string
+  ): Promise<void> {
+    await this.createNotification({
+      userId: invitedUserId,
+      type: 'GROUP_INVITE',
+      content: `${inviterName} invited you to join "${groupName}"`,
+      relatedId: groupId,
+      relatedType: 'group'
+    });
+  }
+
+  // Notify group members of a new post
+  public static async notifyGroupPost(
+    groupMemberIds: string[],
+    posterName: string,
+    groupId: string,
+    groupName: string
+  ): Promise<void> {
+    const notifications = groupMemberIds.map(userId => 
+      this.createNotification({
+        userId,
+        type: 'GROUP_POST',
+        content: `${posterName} posted in "${groupName}"`,
+        relatedId: groupId,
+        relatedType: 'group'
+      })
+    );
+
+    await Promise.all(notifications);
+  }
 }

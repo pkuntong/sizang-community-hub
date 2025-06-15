@@ -1,141 +1,132 @@
-import React, { useState, useEffect } from 'react';
-import { BellIcon } from '@heroicons/react/24/outline';
-
-interface Notification {
-  id: string;
-  type: 'reply' | 'mention' | 'group_invite';
-  message: string;
-  createdAt: string;
-  read: boolean;
-  link?: string;
-}
+import React, { useState } from 'react';
+import { Icon } from "@iconify/react";
+import { Button, Dropdown, DropdownTrigger, DropdownMenu, DropdownItem, Badge } from "@heroui/react";
+import { useNotifications } from '../context/notification-context';
+import { useNavigate } from 'react-router-dom';
 
 export const NotificationBell: React.FC = () => {
-  const [notifications, setNotifications] = useState<Notification[]>([]);
   const [isOpen, setIsOpen] = useState(false);
-  const [unreadCount, setUnreadCount] = useState(0);
+  const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotifications();
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchNotifications = async () => {
-      try {
-        // TODO: Implement actual API call
-        // Mock data for now
-        const mockNotifications: Notification[] = [
-          {
-            id: '1',
-            type: 'reply',
-            message: 'John replied to your post',
-            createdAt: new Date().toISOString(),
-            read: false,
-            link: '/forum/post/1'
-          },
-          {
-            id: '2',
-            type: 'mention',
-            message: 'Sarah mentioned you in a comment',
-            createdAt: new Date(Date.now() - 3600000).toISOString(),
-            read: false,
-            link: '/forum/post/2'
-          }
-        ];
-
-        setNotifications(mockNotifications);
-        setUnreadCount(mockNotifications.filter(n => !n.read).length);
-      } catch (error) {
-        console.error('Error fetching notifications:', error);
-      }
-    };
-
-    fetchNotifications();
-
-    // Set up polling for new notifications
-    const interval = setInterval(fetchNotifications, 30000); // Poll every 30 seconds
-
-    return () => clearInterval(interval);
-  }, []);
-
-  const handleNotificationClick = async (notification: Notification) => {
-    if (!notification.read) {
-      try {
-        // TODO: Implement actual API call to mark notification as read
-        setNotifications(notifications.map(n =>
-          n.id === notification.id ? { ...n, read: true } : n
-        ));
-        setUnreadCount(prev => Math.max(0, prev - 1));
-      } catch (error) {
-        console.error('Error marking notification as read:', error);
-      }
+  const handleNotificationClick = async (notification: any) => {
+    if (!notification.isRead) {
+      await markAsRead(notification.id);
     }
 
-    if (notification.link) {
-      window.location.href = notification.link;
+    // Navigate based on notification type and relatedId
+    switch (notification.type) {
+      case 'REPLY':
+      case 'MENTION':
+        navigate(`/forum/thread/${notification.relatedId}`);
+        break;
+      case 'GROUP_INVITE':
+        navigate(`/groups/${notification.relatedId}`);
+        break;
+      case 'GROUP_POST':
+        navigate(`/groups/${notification.relatedId}/posts`);
+        break;
+      case 'RESOURCE_SHARE':
+        navigate(`/resources/${notification.relatedId}`);
+        break;
     }
   };
 
-  const getNotificationIcon = (type: Notification['type']) => {
+  const getNotificationIcon = (type: string) => {
     switch (type) {
-      case 'reply':
-        return '💬';
-      case 'mention':
-        return '📢';
-      case 'group_invite':
-        return '👥';
+      case 'REPLY':
+        return 'lucide:message-square';
+      case 'MENTION':
+        return 'lucide:at-sign';
+      case 'GROUP_INVITE':
+        return 'lucide:users';
+      case 'GROUP_POST':
+        return 'lucide:file-text';
+      case 'RESOURCE_SHARE':
+        return 'lucide:link';
       default:
-        return '📌';
+        return 'lucide:bell';
     }
   };
 
   return (
-    <div className="relative">
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="relative p-2 text-gray-500 hover:text-gray-700 focus:outline-none"
+    <Dropdown isOpen={isOpen} onOpenChange={setIsOpen}>
+      <DropdownTrigger>
+        <Button
+          isIconOnly
+          variant="light"
+          className="relative"
+          aria-label="Notifications"
+        >
+          <Icon icon="lucide:bell" className="w-5 h-5" />
+          {unreadCount > 0 && (
+            <Badge
+              color="danger"
+              shape="circle"
+              size="sm"
+              className="absolute -top-1 -right-1"
+            >
+              {unreadCount}
+            </Badge>
+          )}
+        </Button>
+      </DropdownTrigger>
+      <DropdownMenu
+        aria-label="Notifications"
+        className="w-80"
+        onAction={(key) => {
+          if (key === 'mark-all-read') {
+            markAllAsRead();
+          }
+        }}
       >
-        <BellIcon className="w-6 h-6" />
-        {unreadCount > 0 && (
-          <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-500 rounded-full">
-            {unreadCount}
-          </span>
-        )}
-      </button>
+        <DropdownItem
+          key="header"
+          className="h-12 flex items-center justify-between border-b border-divider"
+        >
+          <span className="font-semibold">Notifications</span>
+          {unreadCount > 0 && (
+            <Button
+              size="sm"
+              variant="light"
+              onPress={() => markAllAsRead()}
+            >
+              Mark all as read
+            </Button>
+          )}
+        </DropdownItem>
 
-      {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg overflow-hidden z-50">
-          <div className="p-4 border-b border-gray-200">
-            <h3 className="text-lg font-semibold">Notifications</h3>
-          </div>
-
-          <div className="max-h-96 overflow-y-auto">
-            {notifications.length === 0 ? (
-              <div className="p-4 text-center text-gray-500">
-                No notifications
-              </div>
-            ) : (
-              notifications.map((notification) => (
-                <button
-                  key={notification.id}
-                  onClick={() => handleNotificationClick(notification)}
-                  className={`w-full p-4 text-left hover:bg-gray-50 transition-colors ${
-                    !notification.read ? 'bg-blue-50' : ''
+        {notifications.length === 0 ? (
+          <DropdownItem key="empty" className="h-24 flex items-center justify-center text-foreground-500">
+            <span>No notifications</span>
+          </DropdownItem>
+        ) : (
+          notifications.map((notification) => (
+            <DropdownItem
+              key={notification.id}
+              className={`py-3 ${!notification.isRead ? 'bg-primary-50' : ''}`}
+              onPress={() => handleNotificationClick(notification)}
+            >
+              <div className="flex items-start gap-3">
+                <Icon
+                  icon={getNotificationIcon(notification.type)}
+                  className={`w-5 h-5 mt-0.5 ${
+                    !notification.isRead ? 'text-primary' : 'text-foreground-500'
                   }`}
-                >
-                  <div className="flex items-start space-x-3">
-                    <span className="text-xl">
-                      {getNotificationIcon(notification.type)}
-                    </span>
-                    <div className="flex-1">
-                      <p className="text-sm text-gray-900">{notification.message}</p>
-                      <p className="text-xs text-gray-500 mt-1">
-                        {new Date(notification.createdAt).toLocaleString()}
-                      </p>
-                    </div>
-                  </div>
-                </button>
-              ))
-            )}
-          </div>
-        </div>
-      )}
-    </div>
+                />
+                <div className="flex-1 min-w-0">
+                  <p className={`text-sm ${!notification.isRead ? 'font-medium' : ''}`}>
+                    {notification.content}
+                  </p>
+                  <p className="text-xs text-foreground-500 mt-1">
+                    {new Date(notification.createdAt).toLocaleString()}
+                  </p>
+                </div>
+              </div>
+            </DropdownItem>
+          ))
+        )}
+      </DropdownMenu>
+    </Dropdown>
   );
 }; 

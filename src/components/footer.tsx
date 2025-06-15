@@ -38,7 +38,12 @@ export const Footer: React.FC = () => {
           <div>
             <h4 className="font-semibold mb-3">Connect</h4>
             <div className="flex gap-4 mb-4">
-              <Link href="#" isExternal aria-label="Facebook">
+              <Link
+                aria-label="Facebook"
+                href="https://www.facebook.com/groups/9630652876"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <Icon icon="logos:facebook" className="text-2xl" />
               </Link>
               <Link href="#" isExternal aria-label="YouTube">
