@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, CardBody, Switch, Input, Button } from "@heroui/react";
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth } from '../../components/auth/auth-context';
 
 interface SiteSettings {
   inviteOnly: boolean;
@@ -152,4 +152,4 @@ export const AdminSettings: React.FC = () => {
       </Card>
     </div>
   );
-}; 
+};

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Input } from "@heroui/react";
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../components/auth/auth-context';
 import { NotificationService } from "../services/notification-service";
 
 interface GroupInviteProps {
@@ -74,4 +74,4 @@ export const GroupInvite: React.FC<GroupInviteProps> = ({
       </div>
     </form>
   );
-}; 
+};

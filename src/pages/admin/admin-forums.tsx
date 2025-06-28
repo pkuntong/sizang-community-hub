@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, CardBody, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Button, Input, Textarea } from "@heroui/react";
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth } from '../../components/auth/auth-context';
 import { ForumCategory } from '../../types/models';
 
 export const AdminForums: React.FC = () => {
@@ -186,4 +186,4 @@ export const AdminForums: React.FC = () => {
       </div>
     </div>
   );
-}; 
+};

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, Input, Textarea, Select, SelectItem, Chip } from "@heroui/react";
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth } from '../../components/auth/auth-context';
 import { Icon } from "@iconify/react";
 
 interface ResourceFormData {
@@ -200,4 +200,4 @@ export const ResourceForm: React.FC<ResourceFormProps> = ({
       </div>
     </form>
   );
-}; 
+};

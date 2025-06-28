@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, CardBody, Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Button, Chip } from "@heroui/react";
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth } from '../../components/auth/auth-context';
 import { User } from '../../types/models';
 
 export const AdminUsers: React.FC = () => {
@@ -116,4 +116,4 @@ export const AdminUsers: React.FC = () => {
       </Card>
     </div>
   );
-}; 
+};

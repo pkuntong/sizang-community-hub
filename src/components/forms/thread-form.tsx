@@ -1,7 +1,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, Input, Textarea, Select, SelectItem } from "@heroui/react";
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth } from '../../components/auth/auth-context';
 
 interface ThreadFormData {
   title: string;
@@ -93,4 +93,4 @@ export const ThreadForm: React.FC<ThreadFormProps> = ({
       </div>
     </form>
   );
-}; 
+};

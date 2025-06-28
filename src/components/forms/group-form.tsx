@@ -1,7 +1,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, Input, Textarea, Select, SelectItem } from "@heroui/react";
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth } from '../../components/auth/auth-context';
 
 interface GroupFormData {
   name: string;
@@ -99,4 +99,4 @@ export const GroupForm: React.FC<GroupFormProps> = ({
       </div>
     </form>
   );
-}; 
+};

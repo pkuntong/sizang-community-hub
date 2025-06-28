@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Textarea } from "@heroui/react";
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../components/auth/auth-context';
 import { NotificationService } from "../services/notification-service";
 
 interface ForumReplyProps {
@@ -93,4 +93,4 @@ export const ForumReply: React.FC<ForumReplyProps> = ({
       </div>
     </form>
   );
-}; 
+};

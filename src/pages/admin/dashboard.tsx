@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardBody, Tabs, Tab } from "@heroui/react";
 import { Icon } from "@iconify/react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../hooks/useAuth";
+import { useAuth } from "../../components/auth/auth-context";
 import { AdminForums } from "./admin-forums";
 import { AdminReports } from "./admin-reports";
 import { RegistrationSettings } from "../../components/admin/RegistrationSettings";
@@ -61,4 +61,4 @@ export const AdminDashboard: React.FC = () => {
       </Tabs>
     </div>
   );
-}; 
+};

@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { PermissionGuard } from "../components/permission-guard";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "../components/auth/auth-context";
 
 export const CommunityHeader: React.FC = () => {
   const navigate = useNavigate();
